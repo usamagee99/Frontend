@@ -30,7 +30,17 @@
                <!-- <p>{{item.data_readings}}</p> -->
                 <v-row>
                <!-- <li v-for="reading in item.data_readings"> -->
-                <v-col v-for="reading in item.data_readings" outline><b>{{ reading.value}}</b></v-col>
+                <v-col v-for="(reading, index) in item.data_readings" outline>
+                <small v-if="index == 0">Operator ID: </small>
+                <small v-if="index == 1">Vehicle #: </small>
+                <small v-if="index == 2">Fuel Type: </small>
+                <small v-if="index == 3">Litres: </small>
+                <small v-if="index == 4">Amount: </small>
+                <small v-if="index == 5">Rate: </small>
+                <small v-if="index == 6">Total Litres: </small>
+                <small v-if="index == 7">Total Amount: </small>
+                <b>{{ reading.value}}</b>
+                </v-col>
                 
                <!-- </li> -->
               </v-row>
@@ -62,7 +72,7 @@
           key: 'date',
         },
         {
-          title: 'Device',
+          title: 'Device Type',
           align: 'center',
           sortable: false,
           key: 'device.device_type.type',
