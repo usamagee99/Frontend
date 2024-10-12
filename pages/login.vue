@@ -1,73 +1,79 @@
 <template>
-    <v-sheet class="mx-auto" max-width="300">
-      <v-form @submit.prevent="submit">
-        <v-text-field
-          label="Username"
-          v-model="email" prepend-icon="mdi-account-circle"
-        ></v-text-field>
-        <v-text-field label="Password" v-model="password" type="password" prepend-icon="mdi-lock" />
-  
-        <v-btn
-          :loading="loading"
-          class="mt-2"
-          text="Submit"
-          type="submit"
-          block
-        ></v-btn>
-      </v-form>
-    </v-sheet>
+    <v-container class="login-container">
+        <v-card>
+            <v-card-text>
+                <v-form @submit.prevent="submit">
+                    <v-text-field label="Email" v-model="email" prepend-icon="mdi-account-circle"></v-text-field>
+                    <v-text-field label="Password" v-model="password" type="password" prepend-icon="mdi-lock" />
+                </v-form>
+                <v-card-actions>
+                    <v-btn class="mt-2" text="Login" type="submit" color="info" variant="tonal" block></v-btn>
+                </v-card-actions>
+            </v-card-text>
+        </v-card>
+    </v-container>
 </template>
 
 
-<script>
-  const auth = useCookie('auth-cookie')
-  export default {
-    data: () => ({
-    //   loading: false,
-      //rules: [value => vm.checkApi(value)],
-    //   timeout: null,
-      email: '',
-      password: '',
-    //   auth: useCookie('auth-cookie')
-    }),
+<script setup lang="ts">
+import { ref } from 'vue'
+const user = useCookie<{ name: string }>('user')
+const logins = useCookie<number>('logins')
 
-    methods: {
-      async submit (event) {
+// const name = ref('')
 
-        console.log('submit clicked : ')
-        console.log('submit email : ', this.email)
+// const login = () => {
+//   logins.value = (logins.value || 0) + 1
+//   user.value = { name: name.value }
+// }
 
-        const results = await event
+// const logout = () => {
+//   user.value = null
+// }
 
-        const { data } = await useFetch('/api/login', {
-            method: 'POST',
-            params: {
-                email: this.email,
-                password: this.password
-            }
-        })
 
-        console.log('auth-resp on client : ', data.value)
+const email = ref('')
 
-        auth.value = data.value.access_token
+const password = ref('')
 
-        // this.loading = false
+const submit = async (event) => {
 
-        // alert(JSON.stringify(results, null, 2))
-      },
-    //   async checkApi (userName) {
-    //     // return new Promise(resolve => {
-    //     //   clearTimeout(this.timeout)
+    console.log('submit clicked : ')
 
-    //     //   this.timeout = setTimeout(() => {
-    //     //     if (!userName) return resolve('Please enter a user name.')
-    //     //     if (userName === 'johnleider') return resolve('User name already taken. Please try another one.')
+    // const results = await event
 
-    //     //     return resolve(true)
-    //     //   }, 1000)
-    //     // })
+    const { data } = await useFetch('/api/login', {
+        method: 'POST',
+        params: {
+            email: email.value,
+            password: password.value
+        }
+    })
 
-    //   },
-    },
-  }
+    // console.log('auth-resp on client : ', data.value)
+
+    // auth.value = data.value.access_token
+
+    // this.loading = false
+
+    // alert(JSON.stringify(results, null, 2))
+}
+
+
 </script>
+
+<style scoped>
+.v-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    min-height: 85vh;
+    width: 450px;
+    /* background-color:blue; */
+}
+</style>
