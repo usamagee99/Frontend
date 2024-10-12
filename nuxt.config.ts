@@ -7,6 +7,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  app: {
+    baseURL: '/portal/'
+  }
   modules: [
     '@pinia/nuxt',
     (_options, nuxt) => {
