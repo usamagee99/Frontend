@@ -1,5 +1,5 @@
 export default defineEventHandler(async event=>{
-    const resp = await $fetch('https://devices.utnt.net/utnt_fastapi_server/api/filter',{
+    const resp = await $fetch('http://127.0.0.1:8000/api/filter',{
         method: 'POST',
         body: {
           // My todo data
