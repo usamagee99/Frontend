@@ -112,7 +112,7 @@
   export default {
     data: () => ({
       itemsPerPage: 40,
-      totalItems: 40
+      totalItems: 40,
       headers: [
         {
           title: 'Date',
