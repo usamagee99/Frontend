@@ -1,26 +1,46 @@
 <template>
+  <NuxtLayout name="main">
     <v-app>
       <v-container>
-        <!-- <v-card> -->
-          <!-- <v-row>
-            <v-col><v-date-input label="Start Date" variant="solo-inverted"></v-date-input>    
+        <!-- <v-row>
+            <v-col md="2"><v-date-input label="Start Date" v-model="startDt" variant="solo-inverted"></v-date-input>    
             </v-col>
-            <v-col><v-date-input label="End Date" variant="solo-inverted"></v-date-input>    
+            <v-col md="2"><v-date-input label="End Date" variant="solo-inverted"></v-date-input>    
+            </v-col>
+            <v-col md="2"><v-btn @click="retrieveData">Click</v-btn>    
             </v-col>
           </v-row> -->
-          <!-- <v-date-input label="Date input" variant="solo-inverted"></v-date-input> -->
-        <!-- </v-card> -->
+        <v-row>
+          <v-col md="4"><v-row>
+            <v-col md="6"><v-date-input label="Start Date" v-model="startDate"
+                  variant="solo-inverted"></v-date-input></v-col>
+            <v-col md="6"><v-date-input label="End Date" v-model="endDate"
+                  variant="solo-inverted"></v-date-input></v-col></v-row>
+          </v-col>
+          <!-- <v-col md="2"><v-date-input label="End Date" variant="solo-inverted"></v-date-input>
+            </v-col> -->
+          <v-col md="2"><v-text-field label="Device ID" v-model="deviceId"></v-text-field></v-col>
+          <v-col md="2"><v-text-field label="Vehicle #" v-model="vehicleNo"></v-text-field></v-col>
+          <v-col md="2"><v-btn @click="retrieveData" color="#5865f2">Search</v-btn>
+          </v-col>
+        </v-row>
+        <!-- <v-date-input label="Date input" variant="solo-inverted"></v-date-input> -->
       </v-container>
-      <!-- <v-spacer></v-spacer> -->
       <v-container>
-        <!-- <v-card>
-          <v-date-input label="Date input" variant="solo-inverted" max-width="200"></v-date-input>
-        </v-card> -->
+        <v-card>
+          <!-- <h3>Aggregate Amount: {{ aggrAmount }}</h3>
+          <h3>Aggregate Litres: {{ aggrLitres }}</h3> -->
+          <v-row>
+            <v-col md="2"><v-text-field label="Aggregate Litres" v-model="aggrLitres" readonly></v-text-field></v-col>
+            <v-col md="2"><v-text-field label="Aggregate Amount" v-model="aggrAmount" readonly></v-text-field></v-col>
+          </v-row>
+        </v-card>
         <v-card>
           <!-- <v-date-input label="Date input" variant="solo-inverted" max-width="200"></v-date-input> -->
-          <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items="serverItems"
-            :items-length="totalItems" :loading="loading" :search="search" item-value="name"
-            @update:options="loadItems">
+          <v-data-table-server v-model:items-per-page="_itemsPerPage" :headers="headers" :items="serverItems"
+            :items-length="totalItems" item-value="name"
+            @update:options="retrieveData">
+            
             <!-- <template v-slot:item.actions="{ item }">
               <v-icon small @click="viewItem(item)">mdi-eye</v-icon>
   
@@ -97,35 +117,42 @@
         </v-card>
       </v-container>
     </v-app>
+  </NuxtLayout>
   </template>
   
-  <script>
-  
-  //   const { data, error } = await useAsyncData('fetchData', () => $fetch('/api/deviceData'));
-  
-  // console.log('server API resp : ', data)
-  
-  //const API = {
-    
-  //}
-  
-  export default {
-    data: () => ({
-      itemsPerPage: 40,
-      totalItems: 40,
-      headers: [
+  <script setup lang="ts">
+  definePageMeta({
+    layout: 'main'
+})
+
+import { ref } from 'vue';
+// import AppBar from '~/components/AppBar.vue';
+
+const startDate = ref<Date>(new Date(new Date().getTime() + 5 * 60 * 60 * 1000));
+const endDate = ref<Date>(new Date(new Date().getTime() + 5 * 60 * 60 * 1000));
+// const operatorId = ref<string>('');
+const deviceId = ref<string>('');
+
+const vehicleNo = ref<string>('');
+const serverItems = ref([]);
+const totalItems = ref<number>(0);
+const aggrLitres = ref<number>(0);
+const aggrAmount = ref<number>(0);
+const _itemsPerPage = ref(50);
+const _page = ref(1);
+
+const headers= [
         {
           title: 'Date',
           align: 'start',
           sortable: false,
-          // key: 'date',
-          value: 'date'
+          key: 'date',
         },
         {
-          title: 'Device Type',
+          title: 'Device ID',
           align: 'center',
           sortable: false,
-          key: 'device.device_type.type',
+          key: 'device.id',
         },
         {
           title: 'Station',
@@ -192,77 +219,66 @@
           // key: 'device.station.name',
           align: 'center',
         }
-
   
         // { title: 'Fat (g)', key: 'fat', align: 'end' },
         // { title: 'Carbs (g)', key: 'carbs', align: 'end' },
         // { title: 'Protein (g)', key: 'protein', align: 'end' },
         // { title: 'Iron (%)', key: 'iron', align: 'end' },
-      ],
-      search: '',
-      serverItems: [],
-      loading: true,
-      totalItems: 40,
-      dialog: false,
-      selectedItem: {}
-    }),
-    methods: {
-      async fetchDeviceData({ page, itemsPerPage, sortBy }) {
-      const { data } = await useFetch('/api/deviceData')
-      // console.log('resp data : ', data.value)
-      console.log('resp data : ', data)
-      console.log('resp data.value : ', data.value)
-      console.log('resp data.value.data : ', data.value.data)
-      return new Promise(resolve => {
-        setTimeout(() => {
-          const start = (page - 1) * itemsPerPage
-          const end = start + itemsPerPage - 1
-          //       console.log('actual data : ', data.data)
-          const items = data.value.data.slice()
-  
-          //     //   if (sortBy.length) {
-          //     //     const sortKey = sortBy[0].key
-          //     //     const sortOrder = sortBy[0].order
-          //     //     items.sort((a, b) => {
-          //     //       const aValue = a[sortKey]
-          //     //       const bValue = b[sortKey]
-          //     //       return sortOrder === 'desc' ? bValue - aValue : aValue - bValue
-          //     //     })
-          //     //   }
-  
-          const paginated = items.slice(start, end)
-  
-          resolve({ items: paginated, total: items.length })
-        }, 500)
-      })
-    },
-      async loadItems({ page, itemsPerPage, sortBy }) {
-        this.loading = true
-        const data = await this.fetchDeviceData({ page, itemsPerPage, sortBy })
-        console.log('data : ', data)
-        console.log('data.items : ', data.items)
-        console.log('data.value : ', data.value)
-        console.log('data.data : ', data.data)
-        // { //.then(({ items, total }) => {
-        //   console.log("Items : ", items)
-          this.serverItems = data.items
-          // this.totalItems = total
-          this.loading = false
-        // }
-      },
-  
-      viewItem(item) {
-        console.log('View item : ', item)
-        console.log('View item.id : ', item.id)
-        // Logic to edit the item
-      },
-  
-      showDetails(item) {
-        console.log('Selected Item: ', item)
-        selectedItem.value = item
-        dialog = true
-      }
-    },
+      ];
+
+const retrieveData = async ({ page, itemsPerPage }) => {
+  console.log("fetchData invoked : ")
+  console.log("==== itemsPerPage : ", itemsPerPage)
+  if (!itemsPerPage)
+  {
+    itemsPerPage = _itemsPerPage.value
+    console.log("==== setting itemsPerPage = _itemsPerPage.value : ", itemsPerPage)
   }
-  </script>
-  <!-- </template> -->
+
+  if (!page)
+  {
+    page = _page.value
+    console.log("==== setting page = _page.value : ", page)
+  }
+  // console.log("==== page : ", page)
+  // console.log("Operator ID : ", operatorId)
+  const { data } = await useFetch('/api/deviceData', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          page: page,
+          itemsPerPage: itemsPerPage,
+          startDate: startDate.value.getTime() + 5 * 60 * 60 * 1000, // _startDate.value,
+          endDate: endDate.value.getTime() + 5 * 60 * 60 * 1000, // _endDate.value
+          deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
+          vehicleNum: vehicleNo.value.length === 0 ? null: parseInt(vehicleNo.value) // _endDate.value
+
+        })
+        // params: {
+        //     email: email.value,
+        //     password: password.value
+        // }
+    });
+  const res = "response";
+  serverItems.value = data.value.data;
+  totalItems.value = data.value.total;
+  aggrLitres.value = data.value.aggr_litres
+  aggrAmount.value = data.value.aggr_amount
+  console.log('data.value.aggr_litres : ', data.value.aggr_litres)
+  console.log('data.value.aggr_amount : ', data.value.aggr_amount)
+  console.log("received total : ", totalItems.value)
+  if(page)
+  {
+    _page.value = page
+  }
+
+  if(itemsPerPage)
+  {
+    console.log('if itemsPerPage : ', itemsPerPage)
+    _itemsPerPage.value = itemsPerPage
+  }
+};
+
+</script>
