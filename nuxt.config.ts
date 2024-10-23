@@ -7,9 +7,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
-  // app: {
-  //   baseURL: '/portal/'
-  // }
+  app: {
+    baseURL: '/portal/'
+  },
   modules: [
     'nuxt-auth-utils',
     (_options, nuxt) => {
