@@ -11,7 +11,7 @@ export default defineNuxtConfig({
   //   baseURL: '/portal/'
   // }
   modules: [
-    '@pinia/nuxt',
+    'nuxt-auth-utils',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error
@@ -27,7 +27,7 @@ export default defineNuxtConfig({
       },
     },
   },
-  pinia: {
-    storesDirs: ['./stores/**', './custom-folder/stores/**'],
-  },
+  // pinia: {
+  //   storesDirs: ['./stores/**', './custom-folder/stores/**'],
+  // },
 })

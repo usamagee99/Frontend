@@ -242,7 +242,7 @@ const retrieveData = async ({ page, itemsPerPage }) => {
   }
   // console.log("==== page : ", page)
   // console.log("Operator ID : ", operatorId)
-  const { data } = await useFetch('/api/deviceData', {
+  const { data } = await useFetch('/api/devicedata', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
