@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
                 if(event.path.startsWith('/api/')){
                     throw error
                 } else {
-                    await sendRedirect(event, '/login')
+                    await navigateTo({ path: '/login' })
                 }
             }
             

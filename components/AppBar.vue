@@ -42,6 +42,6 @@ const items = ref([
 
 const logoutSession = async () => {
   await clear()
-  window.location.href = "/login"
+    navigateTo({ path: '/login' })
 };
 </script>

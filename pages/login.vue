@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import nuxtConfig from '~/nuxt.config';
 const user = useCookie<{ name: string }>('user')
 const logins = useCookie<number>('logins')
 
@@ -71,11 +72,11 @@ const submit = async () => {
 
     if (error.value === null)
     {
-        window.location.href = "/"
+        await navigateTo({path: '/'})
     }
     else {
         console.log('login error : ', error.value)
-    alert(error)
+        alert(error)
   }
 
     // console.log('auth-resp on client : ', data.value)
