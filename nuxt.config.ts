@@ -7,6 +7,12 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify'],
   },
+  runtimeConfig: {
+    public: {
+      apiBaseURL: 'https://devices.utnt.net/utnt_fastapi_server',
+      baseURL: '/webapp/'
+    }
+  },
   app: {
     baseURL: '/webapp/'
   },
@@ -26,8 +32,5 @@ export default defineNuxtConfig({
         transformAssetUrls,
       },
     },
-  },
-  // pinia: {
-  //   storesDirs: ['./stores/**', './custom-folder/stores/**'],
-  // },
+  }
 })

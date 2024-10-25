@@ -16,6 +16,8 @@ const privateRoutes = [
 ]
 
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig()
+
     if (!publicRoutes.includes(event.path)) {
         if(privateRoutes.includes(event.path + ' ' +event.method)){
             try{
@@ -36,7 +38,7 @@ export default defineEventHandler(async (event) => {
                 if(event.path.startsWith('/api/')){
                     throw error
                 } else {
-                    await sendRedirect(event, '/')
+                    await sendRedirect(event, `${config.public.baseURL}`)
                 }
             }
             

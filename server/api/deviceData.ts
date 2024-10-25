@@ -10,11 +10,10 @@ interface Filter {
 
 
 export default defineEventHandler(async (event) =>{
-    // console.log('devicedata.post.ts > session : ', session)
-    // console.log('devicedata.post.ts > session.token : ', session.token)
+    const config = useRuntimeConfig()
+
     const { startDate, endDate, page, itemsPerPage, deviceId, vehicleNum } = await readBody<Filter>(event)
-    // const {session, user} = useUserSession()
-    const resp = await $fetch('https://devices.utnt.net/utnt_fastapi_server/api/filter',{
+    const resp = await $fetch(`${config.public.apiBaseURL}/api/filter`,{
         method: 'POST',
         body: {
             start_date: startDate,

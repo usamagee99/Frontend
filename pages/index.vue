@@ -3,10 +3,10 @@
     <v-card>
       <v-card-text>
         <v-form @submit.prevent="submit">
-          <v-text-field label="Email" v-model="inputs.email" prepend-icon="mdi-account-circle"></v-text-field>
-          <v-text-field label="Password" v-model="inputs.password" type="password" prepend-icon="mdi-lock" />
+          <v-text-field label="Email" v-model="inputs.email" :rules="[required]" prepend-icon="mdi-account-circle"></v-text-field>
+          <v-text-field label="Password" v-model="inputs.password" :rules="[required]" type="password" prepend-icon="mdi-lock" />
           <v-card-actions>
-            <v-btn class="mt-2" text="Login" type="submit" color="info" variant="tonal" block></v-btn>
+            <v-btn class="mt-2" text="Login" type="submit" color="info" variant="tonal" :disabled="!isValid" block></v-btn>
           </v-card-actions>
         </v-form>
 
@@ -17,13 +17,16 @@
 
 
 <script setup lang="ts">
-const user = useCookie<{ name: string }>('user')
-const logins = useCookie<number>('logins')
-
 const inputs = reactive({
   email: '',
   password: ''
 })
+
+const isValid = computed(() => {
+  return inputs.email && inputs.password;
+});
+
+const required = (value) => !!value || 'Field is required';
 
 const submit = async () => {
 
@@ -43,7 +46,7 @@ const submit = async () => {
   }
   else {
     console.log('login error : ', error.value)
-    alert(error)
+    alert("Incorrect username or password.")
   }
 }
 

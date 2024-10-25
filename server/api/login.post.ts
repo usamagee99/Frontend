@@ -4,23 +4,28 @@ interface Params {
 }
 
 export default defineEventHandler(async (event) => {
+    const config = useRuntimeConfig()
     const { email, password } = await readBody<Params>(event)
+    console.log('login.post.ts > email : ', email)
+    console.log('login.post.ts > password : ', password)
     if (typeof email === 'string' && typeof password === 'string') {
-        if (email.length >= 8 && password.length >= 8) {
-            const result = await $fetch('https://devices.utnt.net/utnt_fastapi_server/api/token',{
-                method: 'POST',
-                body: {
-                  email: email,
-                  password: password
-                }})
-            if (result && result !== undefined) {
-                await setUserSession(event, {
-                    user: true,
-                    token: result.access_token
-                })
-                return { error: null }
+        // if (email.length >= 6 && password.length >= 6) {
+        const result = await $fetch(`${config.public.apiBaseURL}/api/token`, {
+            method: 'POST',
+            body: {
+                email: email,
+                password: password
             }
+        })
+
+        if (result && result !== undefined) {
+            await setUserSession(event, {
+                user: true,
+                token: result.access_token
+            })
+            return { error: null }
         }
+        // }
     }
 
     return { error: 'login failed' }
