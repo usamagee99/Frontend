@@ -3,12 +3,12 @@
 import { useCookie } from "nuxt/app"
 
 const publicRoutes = [
-    '/login', // login
+    '/',
     '/api/login'
 ]
 
 const privateRoutes = [
-    '/ GET',   // dashboard
+    '/list GET',
     '/api/user-details GET',
     '/api/devicedata POST',
     '/api/_auth/session GET',
@@ -36,7 +36,7 @@ export default defineEventHandler(async (event) => {
                 if(event.path.startsWith('/api/')){
                     throw error
                 } else {
-                    await sendRedirect(event, '/login')
+                    await sendRedirect(event, '/')
                 }
             }
             
