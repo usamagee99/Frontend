@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     }
   },
   app: {
-    baseURL: 'staging.devices.utnt.net/webapp'
+    baseURL: '/webapp/'
   },
   modules: [
     'nuxt-auth-utils',
