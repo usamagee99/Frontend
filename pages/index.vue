@@ -3,7 +3,7 @@
     <v-card>
       <v-card-text>
         <v-form @submit.prevent="submit">
-          <v-text-field label="Email" v-model="inputs.email" :rules="[required]" prepend-icon="mdi-account-circle"></v-text-field>
+          <v-text-field label="Email or Username" v-model="inputs.userLogin" :rules="[required]" prepend-icon="mdi-account-circle"></v-text-field>
           <v-text-field label="Password" v-model="inputs.password" :rules="[required]" type="password" prepend-icon="mdi-lock" />
           <v-card-actions>
             <v-btn class="mt-2" text="Login" type="submit" color="info" variant="tonal" :disabled="!isValid" block></v-btn>
@@ -18,12 +18,12 @@
 
 <script setup lang="ts">
 const inputs = reactive({
-  email: '',
+  userLogin: '',
   password: ''
 })
 
 const isValid = computed(() => {
-  return inputs.email && inputs.password;
+  return inputs.userLogin && inputs.password;
 });
 
 const required = (value) => !!value || 'Field is required';
@@ -36,7 +36,7 @@ const submit = async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      email: inputs.email,
+      userLogin: inputs.userLogin,
       password: inputs.password
     })
   })
