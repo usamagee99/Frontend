@@ -128,8 +128,8 @@
   import { ref } from 'vue';
   // import AppBar from '~/components/AppBar.vue';
   
-  const startDate = ref<Date>(new Date(new Date().getTime() + 5 * 60 * 60 * 1000));
-  const endDate = ref<Date>(new Date(new Date().getTime() + 5 * 60 * 60 * 1000));
+  const startDate = ref<Date>(new Date(new Date().getTime()));
+  const endDate = ref<Date>(new Date(new Date().getTime()));
   // const operatorId = ref<string>('');
   const deviceId = ref<string>('');
   
@@ -250,8 +250,8 @@
           body: JSON.stringify({
             page: page,
             itemsPerPage: itemsPerPage,
-            startDate: startDate.value.getTime() + 5 * 60 * 60 * 1000, // _startDate.value,
-            endDate: endDate.value.getTime() + 5 * 60 * 60 * 1000, // _endDate.value
+            startDate: startDate.value.getTime(), // + 5 * 60 * 60 * 1000, // _startDate.value,
+            endDate: endDate.value.getTime(), //+ 5 * 60 * 60 * 1000, // _endDate.value
             deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
             vehicleNum: vehicleNo.value.length === 0 ? null: parseInt(vehicleNo.value) // _endDate.value
   
