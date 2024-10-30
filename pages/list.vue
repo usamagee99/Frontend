@@ -81,7 +81,7 @@
               <template v-slot:item.litres="{ item }">
                   <v-row>
                   <v-col outline>
-                  {{ item.data_readings[3].value/10}}
+                  {{ item.data_readings[3].value/100}}
                   </v-col>
                 </v-row>
               </template>
