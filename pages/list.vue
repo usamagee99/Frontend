@@ -88,7 +88,8 @@
               <template v-slot:item.amount="{ item }">
                   <v-row>
                   <v-col outline>
-                  {{ item.data_readings[4].value}}
+                  <!-- {{ item.data_readings[4].value}} -->
+                    {{ (item.data_readings[3].value/100).toFixed(2) * (item.data_readings[5].value/100).toFixed(2)}}
                   </v-col>
                 </v-row>
               </template>
@@ -102,7 +103,7 @@
               <template v-slot:item.totalLitres="{ item }">
                   <v-row>
                   <v-col outline>
-                  {{ item.data_readings[6].value}}
+                  {{ (item.data_readings[6].value/100).toFixed(2)}}
                   </v-col>
                 </v-row>
               </template>
