@@ -137,10 +137,24 @@
   const vehicleNo = ref<string>('');
   const serverItems = ref([]);
   const totalItems = ref<number>(0);
-  const aggrLitres = ref<number>(0);
-  const aggrAmount = ref<number>(0);
+  const aggrLitres = computed(() => {
+    let total = 0;
+    for(let i=0; i<serverItems.value.length; i++)
+    {
+      total += (serverItems.value[i].data_readings[3].value/100); 
+    }
+    return total.toFixed(2);
+  })
+  const aggrAmount = computed(() => {
+    let total = 0;
+    for(let i=0; i<serverItems.value.length; i++)
+    {
+      total += (serverItems.value[i].data_readings[3].value/100)*(serverItems.value[i].data_readings[5].value/100); 
+    }
+    return total.toFixed(2);
+  })
   const _itemsPerPage = ref(50);
-  const _page = ref(1);
+  const _page = ref(1);  
   
   const headers= [
           {
@@ -265,8 +279,8 @@
     const res = "response";
     serverItems.value = data.value.data;
     totalItems.value = data.value.total;
-    aggrLitres.value = data.value.aggr_litres
-    aggrAmount.value = data.value.aggr_amount
+    // aggrLitres.value = data.value.aggr_litres
+    // aggrAmount.value = data.value.aggr_amount
     if(page)
     {
       _page.value = page
