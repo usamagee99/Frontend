@@ -109,8 +109,7 @@
   
   import { ref } from 'vue';
   
-  //const startDate = ref<Date>(new Date(new Date().getTime()));
-    const startDate = ref(new Date('2024-01-01'));
+  const startDate = ref<Date>(new Date(new Date().getTime()));
   const endDate = ref<Date>(new Date(new Date().getTime()));
   const deviceId = ref<string>('');
   

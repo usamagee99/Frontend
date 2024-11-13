@@ -9,8 +9,7 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      //apiBaseURL: 'https://devices.utnt.net/utnt_fastapi_server',
-      apiBaseURL: 'http://127.0.0.1:8000',
+      apiBaseURL: 'https://devices.utnt.net/utnt_fastapi_server',
       baseURL: '/webapp/'
     }
   },

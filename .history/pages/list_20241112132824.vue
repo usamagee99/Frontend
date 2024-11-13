@@ -109,8 +109,7 @@
   
   import { ref } from 'vue';
   
-  //const startDate = ref<Date>(new Date(new Date().getTime()));
-    const startDate = ref(new Date('2024-01-01'));
+  const startDate = ref<Date>(new Date(new Date().getTime()));
   const endDate = ref<Date>(new Date(new Date().getTime()));
   const deviceId = ref<string>('');
   
@@ -220,7 +219,13 @@
           // { title: 'Protein (g)', key: 'protein', align: 'end' },
           // { title: 'Iron (%)', key: 'iron', align: 'end' },
         ];
-  
+
+
+// Automatically load data on page load
+// onMounted(() => {
+//   retrieveData({ page: 1, itemsPerPage: 50 });
+// });
+
   const retrieveData = async ({ page, itemsPerPage }) => {
     if (!itemsPerPage)
     {
@@ -231,6 +236,24 @@
     {
       page = _page.value
     }
+
+    const defaultStartDate = new Date(new Date().getFullYear(), 0, 1);
+    const defaultEndDate = new Date();
+    console.log(defaultStartDate.getTime());
+    console.log(new Date(defaultStartDate.getTime()).toLocaleString()); 
+
+    console.log(startDate.value.getTime());
+    console.log(new Date(startDate.value.getTime()).toLocaleString()); 
+
+    const filterParams = {
+    page,
+    itemsPerPage,
+    startDate: startDate.value.getTime() || defaultStartDate.getTime(),
+    endDate: endDate.value.getTime() || defaultEndDate.getTime(),
+    deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
+    vehicleNum: vehicleNo.value.length === 0 ? null : parseInt(vehicleNo.value),
+  };
+
     // console.log("==== page : ", page)
     // console.log("Operator ID : ", operatorId)
     const { data } = await useFetch('/api/devicedata', {
@@ -238,15 +261,16 @@
           headers: {
               "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            page: page,
-            itemsPerPage: itemsPerPage,
-            startDate: startDate.value.getTime(),
-            endDate: endDate.value.getTime(),
-            deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
-            vehicleNum: vehicleNo.value.length === 0 ? null: parseInt(vehicleNo.value)
+          body: JSON.stringify(filterParams)
+          // body: JSON.stringify({
+          //   page: page,
+          //   itemsPerPage: itemsPerPage,
+          //   startDate: startDate.value.getTime(),
+          //   endDate: endDate.value.getTime(),
+          //   deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
+          //   vehicleNum: vehicleNo.value.length === 0 ? null: parseInt(vehicleNo.value)
   
-          })
+          // })
       });
     const res = "response";
     serverItems.value = data.value.data;

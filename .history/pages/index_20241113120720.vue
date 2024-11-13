@@ -20,7 +20,7 @@
     <v-card class="col-lg-4 col-md-6">
       <v-card-text class="text-center py-4">
         <v-btn icon href="index.html" class="mb-4">
-          <v-img src="/assets/images/logo.png" alt="Logo" max-width="50"></v-img>
+          <v-img src="assets/img/logo.png" alt="Logo" max-width="50"></v-img>
           <span class="ml-2 d-none d-lg-block">NiceAdmin</span>
         </v-btn>
 

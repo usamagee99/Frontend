@@ -109,8 +109,7 @@
   
   import { ref } from 'vue';
   
-  //const startDate = ref<Date>(new Date(new Date().getTime()));
-    const startDate = ref(new Date('2024-01-01'));
+  const startDate = ref<Date>(new Date(new Date().getTime()));
   const endDate = ref<Date>(new Date(new Date().getTime()));
   const deviceId = ref<string>('');
   
@@ -220,8 +219,16 @@
           // { title: 'Protein (g)', key: 'protein', align: 'end' },
           // { title: 'Iron (%)', key: 'iron', align: 'end' },
         ];
-  
-  const retrieveData = async ({ page, itemsPerPage }) => {
+
+
+// Automatically load data on page load
+onMounted(() => {
+  console.log('Page has mounted. Fetching data...');
+  retrieveData({ page: 1, itemsPerPage: 50 });
+});
+
+  const retrieveData = async ({ page = 1, itemsPerPage = 50 } = {}) => {
+    console.log('Fetching data with:', { page, itemsPerPage });
     if (!itemsPerPage)
     {
       itemsPerPage = _itemsPerPage.value
@@ -231,6 +238,19 @@
     {
       page = _page.value
     }
+
+    const defaultStartDate = new Date(new Date().getFullYear(), 0, 1);
+    const defaultEndDate = new Date();
+
+    const filterParams = {
+    page,
+    itemsPerPage,
+    startDate: startDate.value.getTime() || defaultStartDate.getTime(),
+    endDate: endDate.value.getTime() || defaultEndDate.getTime(),
+    deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
+    vehicleNum: vehicleNo.value.length === 0 ? null : parseInt(vehicleNo.value),
+  };
+
     // console.log("==== page : ", page)
     // console.log("Operator ID : ", operatorId)
     const { data } = await useFetch('/api/devicedata', {
@@ -238,16 +258,11 @@
           headers: {
               "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            page: page,
-            itemsPerPage: itemsPerPage,
-            startDate: startDate.value.getTime(),
-            endDate: endDate.value.getTime(),
-            deviceId: deviceId.value.length === 0 ? null : parseInt(deviceId.value),
-            vehicleNum: vehicleNo.value.length === 0 ? null: parseInt(vehicleNo.value)
-  
-          })
+          body: JSON.stringify(filterParams)
       });
+
+      console.log('Data fetched successfully:', data.value);
+      
     const res = "response";
     serverItems.value = data.value.data;
     totalItems.value = data.value.total;

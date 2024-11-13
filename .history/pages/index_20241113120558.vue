@@ -1,26 +1,9 @@
-<!-- <template>
-  <v-container class="login-container">
-    <v-card>
-      <v-card-text>
-        <v-form @submit.prevent="submit">
-          <v-text-field label="Email or Username" v-model="inputs.userLogin" :rules="[required]" prepend-icon="mdi-account-circle"></v-text-field>
-          <v-text-field label="Password" v-model="inputs.password" :rules="[required]" type="password" prepend-icon="mdi-lock" />
-          <v-card-actions>
-            <v-btn class="mt-2" text="Login" type="submit" color="info" variant="tonal" :disabled="!isValid" block></v-btn>
-          </v-card-actions>
-        </v-form>
-
-      </v-card-text>
-    </v-card>
-  </v-container>
-</template> -->
-
 <template>
   <v-container class="d-flex align-center justify-center min-vh-100">
     <v-card class="col-lg-4 col-md-6">
       <v-card-text class="text-center py-4">
         <v-btn icon href="index.html" class="mb-4">
-          <v-img src="/assets/images/logo.png" alt="Logo" max-width="50"></v-img>
+          <v-img src="assets/img/logo.png" alt="Logo" max-width="50"></v-img>
           <span class="ml-2 d-none d-lg-block">NiceAdmin</span>
         </v-btn>
 
@@ -69,30 +52,6 @@
   </v-container>
 </template>
 
-<!-- <script lang="ts">
-import { defineComponent, ref } from 'vue';
-
-export default defineComponent({
-  name: 'LoginPage',
-  setup() {
-    const inputs = ref({
-      username: '',
-      password: '',
-      remember: false,
-    });
-    const required = (v: string) => !!v || 'This field is required';
-    
-    const submit = () => {
-      // Handle form submission logic here
-      console.log('Form submitted', inputs.value);
-    };
-
-    return { inputs, required, submit };
-  },
-});
-</script> -->
-
-
 
 <script setup lang="ts">
 const inputs = reactive({
@@ -131,14 +90,3 @@ const submit = async () => {
 
 </script>
 
-<!-- <style scoped>
-.login-container {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  min-height: 85vh;
-  width: 450px;
-}
-</style> -->
-
-<link href="../assets/css/main.css" rel="stylesheet"></link>
